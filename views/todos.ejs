@@ -1,0 +1,115 @@
+<%- include('partials/_header') %> <%- include('partials/_navbar') %>
+
+<div id="content" class="container bg-dark text-light m-auto mt-3 p-5">
+  <!-- Create Button trigger modal -->
+  <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">
+    Create
+  </button>
+  <div class="table-responsive">
+    <table class="table table-responsive table-bordered table-dark table-hover">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>title</th>
+          <th >operators</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (let i=0; i< todos.length; i++) { %>
+          <% if(todos[i].user == userIN) { %>
+          <tr>
+            <td>
+              <%= todos[i]._id %>
+            </td>
+            <td>
+              <%= todos[i].title %>
+            </td>
+            <td>
+              <a href="/todos/<%= todos[i].slug%>" class="btn btn-primary">Read</a>
+              <!-- Update Button trigger modal -->
+              <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#update<%= todos[i]._id%>">Update</button>
+              <a href="/todos/<%= todos[i].slug %>?_method=DELETE" class="btn btn-danger">Delete</a>
+            </td>
+          </tr>
+          <!-- Update Modal -->
+          <div class="modal fade" id="update<%= todos[i]._id%>"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title text-dark">
+                    <%= todos[i]._id %>
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-dark">
+                  <form action="/todos/<%= todos[i].slug %>?_method=PUT" method="post">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" name="title" value="<%= todos[i].title %>">
+                      <label>Title</label>
+                    </div>
+                    <div class="form-floating">
+                      <input type="text" class="form-control" name="description" value="<%= todos[i].description %>">
+                      <label>Description</label>
+                    </div>
+                    <input type="hidden" name="user" value="<%- userIN %>">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cancel
+                  </button>
+                  <button type="submit" class="btn btn-warning">Save</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }} %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Create Modal -->
+  <div
+    class="modal fade"
+    id="createModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-dark" id="exampleModalLabel">Add To Do</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body text-dark">
+          <form action="/todos" method="post">
+            <div class="form-floating">
+              <input type="text" class="form-control" name="title" placeholder="Title">
+              <label>Title</label>
+            </div>
+            <div class="form-floating">
+              <input type="text" class="form-control" name="description" placeholder="Description">
+              <label>Description</label>
+            </div>
+            <input type="hidden" name="user" value="<%- userIN %>">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-success">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/_footer') %>
